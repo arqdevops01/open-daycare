@@ -6,7 +6,24 @@ interface IconConfig {
   fill?: string;
 }
 
-const ICONS = {
+export const ICON_NAMES = [
+  "sun",
+  "plus",
+  "home",
+  "users",
+  "bell",
+  "user",
+  "logout",
+  "camera",
+  "heart",
+  "comment",
+  "megaphone",
+  "photo",
+] as const;
+
+export type IconName = (typeof ICON_NAMES)[number];
+
+const ICONS: Record<IconName, IconConfig> = {
   sun: {
     children: (
       <>
@@ -33,11 +50,7 @@ const ICONS = {
     ),
   },
   bell: {
-    children: (
-      <>
-        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />
-      </>
-    ),
+    children: <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" />,
   },
   user: {
     children: (
@@ -70,11 +83,7 @@ const ICONS = {
     children: <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />,
   },
   megaphone: {
-    children: (
-      <>
-        <path d="m3 11 18-5v12L3 14v-3zM11.6 16.8a3 3 0 1 1-5.8-1.6" />
-      </>
-    ),
+    children: <path d="m3 11 18-5v12L3 14v-3zM11.6 16.8a3 3 0 1 1-5.8-1.6" />,
   },
   photo: {
     children: (
@@ -86,9 +95,7 @@ const ICONS = {
     ),
     strokeWidth: 1.7,
   },
-} satisfies Record<string, IconConfig>;
-
-export type IconName = keyof typeof ICONS;
+};
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, "name" | "fill"> {
   name: IconName;

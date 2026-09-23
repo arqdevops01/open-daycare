@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated reference mockups (dc-runtime), not project source.
+    "References/**",
   ]),
 ]);
 
