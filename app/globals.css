@@ -3,11 +3,33 @@
 @theme inline {
   --color-canvas: #f6ecdf;
   --color-ink: #3f362e;
+  --color-body: #4a4038;
   --color-card: #fffdf9;
   --color-line: #ece0d0;
+  --color-line-soft: #f0e6d8;
+  --color-line-dashed: #dbcdba;
   --color-muted: #a89a8b;
+  --color-soft: #94887b;
   --color-accent: #d9583c;
   --color-accent-deep: #c5503a;
+  --color-action: #e0654a;
+  --color-brand-gradient-a: #f8c3a8;
+  --color-brand-gradient-b: #f2937a;
+  --color-brand-btn-a: #f4977e;
+  --color-brand-btn-b: #ee8164;
+  --color-nav-active-bg: #fbe3d8;
+  --color-nav-active-ink: #d9583c;
+  --color-nav-ink: #6e6359;
+  --color-camera-bg: #fbe3d8;
+  --color-photo-bg: #f4ece1;
+  --color-avatar-bg: #a9d9e8;
+  --color-avatar-ink: #1f7a93;
+  --color-milestone-badge: #cfe9d8;
+  --color-milestone-ink: #3e9b6c;
+  --color-activity-badge: #c7e7f1;
+  --color-activity-ink: #2e89a6;
+  --color-announcement-badge: #ccd8f4;
+  --color-announcement-ink: #4e72c8;
   --font-display: var(--font-fredoka);
   --font-sans: var(--font-nunito);
 }
