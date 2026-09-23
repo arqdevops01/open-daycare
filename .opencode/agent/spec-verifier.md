@@ -1,7 +1,6 @@
 ---
 description: Verificador de los criterios de aceptación de un spec (specs/NN-slug.md). Revisa, corrige y marca los checks. Úsalo al terminar una implementación o cuando se quiera validar un spec: valida pantallas con Playwright (screenshots en .playwright/) contra References/pantallas, el build/lint, la consola del navegador, y las recomendaciones de Next.js 16 con Context7 y node_modules/next/dist/docs/.
 mode: all
-model: opencode/qwen3.6-plus
 permission:
   edit: allow
   bash:

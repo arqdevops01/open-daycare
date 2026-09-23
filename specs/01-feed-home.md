@@ -1,6 +1,6 @@
 # SPEC 01 — Réplica estática del feed como HOME
 
-> **Status:** Aprovado
+> **Status:** Implementado
 > **Date:** 2026-09-23
 > **Objective:** Implementar `References/pantallas/feed.dc.html` como la ruta `/` (HOME) descompuesta en componentes de React, con estilo visual idéntico al mockup, sin autenticación ni base de datos.
 
