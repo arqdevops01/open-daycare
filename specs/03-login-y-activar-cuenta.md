@@ -1,6 +1,6 @@
 # SPEC 03 — Login y activación de cuenta
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-09-24
 > **Objective:** Implementar `References/pantallas/login.dc.html` y `activar-cuenta.dc.html` como las rutas `/login` y `/activate-account`, réplica visual sin backend, sin el selector Personal/Familia y con navegación a `/` al presionar los botones principales.

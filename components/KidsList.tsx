@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Icon } from "./Icon";
 import { KidCard } from "./KidCard";
-import { KIDS } from "@/lib/kids";
+import { useKids } from "./KidsProvider";
 
 export function KidsList() {
+  const { kids } = useKids();
   const [query, setQuery] = useState("");
   const normalized = query.trim().toLowerCase();
-  const kids = KIDS.filter((kid) =>
+  const filtered = kids.filter((kid) =>
     kid.name.toLowerCase().includes(normalized)
   );
 
@@ -35,9 +36,9 @@ export function KidsList() {
         <span className="h-px flex-1 bg-rule" />
       </div>
 
-      {kids.length > 0 ? (
+      {filtered.length > 0 ? (
         <div className="grid grid-cols-2 gap-[14px]">
-          {kids.map((kid) => (
+          {filtered.map((kid) => (
             <KidCard key={kid.id} kid={kid} />
           ))}
         </div>
