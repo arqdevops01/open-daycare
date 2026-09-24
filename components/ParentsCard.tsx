@@ -2,7 +2,7 @@ import { Icon } from "./Icon";
 import type { Parent } from "@/lib/kids";
 
 function parentMeta(parent: Parent) {
-  const relation = parent.relation.toLowerCase();
+  const relation = parent.relation;
   if (parent.status === "active") {
     return `${relation} · ${parent.relation === "Mamá" ? "activa" : "activo"}`;
   }

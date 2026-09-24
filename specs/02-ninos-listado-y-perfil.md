@@ -72,14 +72,14 @@ Convenciones: nombres, ids y variables de código en inglés (regla de `AGENTS.m
 
 ## Acceptance criteria
 
-- [ ] `npm run build` y `npm run lint` pasan sin errores.
-- [ ] `/kids` es visualmente idéntico a `ninos.dc.html` (sidebar "Niños" resaltado, header GESTIÓN, buscador, sección "SALA SOLES · 8 niños" y las 8 tarjetas en grid 2 columnas con avatar, nombre, meta y badge/chevron correctos por niño).
-- [ ] Escribir en el buscador filtra las tarjetas por nombre en vivo (case-insensitive); al borrar vuelven los 8; con cero resultados se muestra el estado vacío "No se encontró ningún niño…".
-- [ ] Click en una tarjeta navega a `/kids/{id}` y muestra el perfil; el de Mateo (`/kids/mateo-fernandez`) es visualmente idéntico a `perfil-nino.dc.html` (banner de alergia al maní, filas fecha nac. 12 mar 2022 / Sala Soles / feb 2025, Lucía Fernández ACTIVA y Diego Fernández PENDIENTE, botón Resumen del día).
-- [ ] Un id inexistente renderiza 404 (`notFound()`).
-- [ ] "Volver a Niños" regresa a `/kids`; el sidebar muestra "Feed" o "Niños" resaltado según la ruta activa y navegan entre sí.
-- [ ] Quedan inertes (`href="#"`) Agregar niño, Editar, Resumen del día, Vincular otro padre, Nueva publicación, Avisos, Mi cuenta, logout y el logo.
-- [ ] La consola del navegador no muestra errores ni warnings al cargar `/kids` y `/kids/[id]`.
+- [ ] `npm run build` y `npm run lint` pasan sin errores. <!-- FAIL: npm run lint pasa (exit 0) pero npm run build falla por entorno: falta el paquete `@vercel/turbopack-next` (Module not found al resolver `next/font/google` desde `app/layout.tsx`); el paquete no está instalado, no figura en package-lock.json y no existe en el registro público npm. `app/layout.tsx` no cambió en este spec; el fallo es pre-existente (scaffold/SPEC 01). -->
+- [x] `/kids` es visualmente idéntico a `ninos.dc.html` (sidebar "Niños" resaltado, header GESTIÓN, buscador, sección "SALA SOLES · 8 niños" y las 8 tarjetas en grid 2 columnas con avatar, nombre, meta y badge/chevron correctos por niño).
+- [x] Escribir en el buscador filtra las tarjetas por nombre en vivo (case-insensitive); al borrar vuelven los 8; con cero resultados se muestra el estado vacío "No se encontró ningún niño…".
+- [x] Click en una tarjeta navega a `/kids/{id}` y muestra el perfil; el de Mateo (`/kids/mateo-fernandez`) es visualmente idéntico a `perfil-nino.dc.html` (banner de alergia al maní, filas fecha nac. 12 mar 2022 / Sala Soles / feb 2025, Lucía Fernández ACTIVA y Diego Fernández PENDIENTE, botón Resumen del día).
+- [x] Un id inexistente renderiza 404 (`notFound()`).
+- [x] "Volver a Niños" regresa a `/kids`; el sidebar muestra "Feed" o "Niños" resaltado según la ruta activa y navegan entre sí.
+- [x] Quedan inertes (`href="#"`) Agregar niño, Editar, Resumen del día, Vincular otro padre, Nueva publicación, Avisos, Mi cuenta, logout y el logo.
+- [x] La consola del navegador no muestra errores ni warnings al cargar `/kids` y `/kids/[id]`.
 
 ## Decisions
 
