@@ -1,6 +1,6 @@
 # SPEC 05 — Vincular padre
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 02, SPEC 04
 > **Date:** 2026-09-24
 > **Objective:** Implementar `References/pantallas/vincular-padre.dc.html` como `/kids/[id]/parent` (card full-screen sin sidebar, entrada desde "Vincular otro padre" del perfil) y hacer que «Enviar invitación» agregue el padre como PENDIENTE a la lista en memoria del Context, reutilizando el feedback del perfil: badge PENDIENTE y desaparición del chip VINCULAR.
