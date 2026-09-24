@@ -37,15 +37,15 @@ Este spec no introduce estructuras de datos persistentes. Los valores de ejemplo
 
 ## Acceptance criteria
 
-- [ ] `npm run build` y `npm run lint` pasan sin errores.
-- [ ] `/login` replica `login.dc.html` **excepto** el bloque "INGRESO COMO": en su lugar se ve `bg-paper` y el formulario queda centrado, sin vacío entre el titular y el campo EMAIL; no se renderiza ningún botón "Personal" ni "Familia".
-- [ ] En `/login`, el email muestra `caro@opendaycare.com`, los campos son editables y al clickear "¿Olvidaste tu contraseña?" se permanece en `/login` (no navega).
-- [ ] "Iniciar sesión" navega a `/` siempre, sin importar los valores ingresados.
-- [ ] "Activá tu cuenta" en `/login` navega a `/activate-account`.
-- [ ] `/activate-account` replica `activar-cuenta.dc.html`: card "Te invitaron a seguir a Mateo · Sala Soles", código `7K4P9`, email `lucia.fernandez@gmail.com`, checkbox de autorización marcado por defecto.
-- [ ] Clickear el checkbox de autorización lo des/marca; el estado marcado usa `#5FB97E`.
-- [ ] "Activar mi cuenta" navega a `/`; "Iniciar sesión" navega a `/login`.
-- [ ] La consola del navegador no muestra errores ni warnings al cargar `/login` y `/activate-account`.
+- [x] `npm run build` y `npm run lint` pasan sin errores.
+- [x] `/login` replica `login.dc.html` **excepto** el bloque "INGRESO COMO": en su lugar se ve `bg-paper` y el formulario queda centrado, sin vacío entre el titular y el campo EMAIL; no se renderiza ningún botón "Personal" ni "Familia".
+- [x] En `/login`, el email muestra `caro@opendaycare.com`, los campos son editables y al clickear "¿Olvidaste tu contraseña?" se permanece en `/login` (no navega).
+- [x] "Iniciar sesión" navega a `/` siempre, sin importar los valores ingresados.
+- [x] "Activá tu cuenta" en `/login` navega a `/activate-account`.
+- [x] `/activate-account` replica `activar-cuenta.dc.html`: card "Te invitaron a seguir a Mateo · Sala Soles", código `7K4P9`, email `lucia.fernandez@gmail.com`, checkbox de autorización marcado por defecto.
+- [x] Clickear el checkbox de autorización lo des/marca; el estado marcado usa `#5FB97E`.
+- [x] "Activar mi cuenta" navega a `/`; "Iniciar sesión" navega a `/login`.
+- [x] La consola del navegador no muestra errores ni warnings al cargar `/login` y `/activate-account`.
 
 ## Decisions
 
