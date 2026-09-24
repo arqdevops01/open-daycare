@@ -1,11 +1,19 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { KIDS, createKid, type Kid, type NewKidInput } from "@/lib/kids";
+import {
+  KIDS,
+  createKid,
+  createParent,
+  type Kid,
+  type NewKidInput,
+  type NewParentInput,
+} from "@/lib/kids";
 
 interface KidsContextValue {
   kids: Kid[];
   addKid: (input: NewKidInput) => void;
+  addParent: (kidId: string, input: NewParentInput) => void;
 }
 
 const KidsContext = createContext<KidsContextValue | null>(null);
@@ -29,8 +37,29 @@ export function KidsProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const addParent = (kidId: string, input: NewParentInput) => {
+    setKids((current) =>
+      current.map((kid) => {
+        if (kid.id !== kidId) {
+          return kid;
+        }
+        const parent = createParent(input);
+        if (!kid.parents.some((existing) => existing.id === parent.id)) {
+          return { ...kid, parents: [...kid.parents, parent] };
+        }
+        let suffix = 2;
+        let id = `${parent.id}-${suffix}`;
+        while (kid.parents.some((existing) => existing.id === id)) {
+          suffix += 1;
+          id = `${parent.id}-${suffix}`;
+        }
+        return { ...kid, parents: [...kid.parents, { ...parent, id }] };
+      })
+    );
+  };
+
   return (
-    <KidsContext.Provider value={{ kids, addKid }}>
+    <KidsContext.Provider value={{ kids, addKid, addParent }}>
       {children}
     </KidsContext.Provider>
   );

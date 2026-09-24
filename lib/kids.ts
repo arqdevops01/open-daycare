@@ -50,6 +50,36 @@ export interface NewKidInput {
   medicalNotes?: string;
 }
 
+export const NEW_PARENT_RELATIONS = ["Mamá", "Papá", "Tutor/a"] as const;
+export type NewParentRelation = (typeof NEW_PARENT_RELATIONS)[number];
+
+export interface NewParentInput {
+  name: string; // "Diego Fernández"
+  email: string; // "correo@ejemplo.com" (solo se valida required; no se guarda)
+  relation: NewParentRelation; // "Mamá" | "Papá" | "Tutor/a"
+}
+
+const PARENT_AVATAR_PALETTE: string[] = [
+  "bg-avatar-bg text-white",
+  "bg-avatar-pink-bg text-white",
+  "bg-avatar-green-bg text-white",
+  "bg-avatar-yellow-bg text-white",
+  "bg-avatar-purple-bg text-white",
+  "bg-avatar-blue-bg text-white",
+];
+
+export function createParent(input: NewParentInput): Parent {
+  const name = input.name.trim();
+  return {
+    id: slugify(name),
+    name,
+    initial: name.charAt(0).toUpperCase(),
+    relation: input.relation,
+    avatarClasses: pickParentAvatar(name),
+    status: "pending",
+  };
+}
+
 export function createKid(input: NewKidInput): Kid {
   const name = input.name.trim();
   const [day, month, year] = input.birthDate.split("/").map(Number);
@@ -93,6 +123,11 @@ function slugify(name: string): string {
 function pickAvatar(name: string): string {
   const hash = [...name].reduce((acc, char) => acc + char.charCodeAt(0), 0);
   return KID_AVATAR_PALETTE[hash % KID_AVATAR_PALETTE.length];
+}
+
+function pickParentAvatar(name: string): string {
+  const hash = [...name].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return PARENT_AVATAR_PALETTE[hash % PARENT_AVATAR_PALETTE.length];
 }
 
 export const KIDS: Kid[] = [
