@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { Icon } from "./Icon";
 import { SIDEBAR } from "@/lib/feed";
 
 export function NewPostComposer() {
   return (
-    <a
-      href="#"
+    <Link
+      href="/posts/new"
       className="mb-6 flex items-center gap-[14px] rounded-[18px] border border-line bg-card px-[18px] py-[14px] shadow-[0_4px_14px_-10px_rgba(120,90,60,.4)]"
     >
       <div className="flex size-10 flex-none items-center justify-center rounded-full bg-brand-gradient-b font-display text-[16px] font-semibold text-white">
@@ -16,6 +17,6 @@ export function NewPostComposer() {
       <span className="flex size-[38px] flex-none items-center justify-center rounded-[12px] bg-camera-bg text-action">
         <Icon name="camera" className="size-[19px]" />
       </span>
-    </a>
+    </Link>
   );
 }
