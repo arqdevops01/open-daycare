@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Icon, type IconName } from "./Icon";
 import { SIDEBAR } from "@/lib/feed";
 
@@ -43,13 +44,13 @@ export function Sidebar({ active = "feed" }: SidebarProps) {
         </div>
       </a>
 
-      <a
-        href="#"
+      <Link
+        href="/posts/new"
         className="mb-[18px] flex w-full items-center justify-center gap-2 rounded-[14px] bg-linear-to-b from-brand-btn-a to-brand-btn-b py-3 text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,.75)]"
       >
         <Icon name="plus" className="size-[17px]" />
         Nueva publicación
-      </a>
+      </Link>
 
       <nav className="flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => (
