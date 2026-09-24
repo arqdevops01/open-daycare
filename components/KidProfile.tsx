@@ -86,7 +86,7 @@ export function KidProfile({ kid }: { kid: Kid }) {
             <Icon name="sun" className="size-[18px]" />
             Resumen del día
           </a>
-          <ParentsCard parents={kid.parents} />
+          <ParentsCard parents={kid.parents} kidId={kid.id} />
         </div>
       </div>
     </>

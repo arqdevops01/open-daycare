@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Icon } from "./Icon";
 import type { Parent } from "@/lib/kids";
 
@@ -9,7 +10,13 @@ function parentMeta(parent: Parent) {
   return `${relation} · invitación enviada`;
 }
 
-export function ParentsCard({ parents }: { parents: Parent[] }) {
+export function ParentsCard({
+  parents,
+  kidId,
+}: {
+  parents: Parent[];
+  kidId: string;
+}) {
   return (
     <div className="rounded-[16px] border border-line bg-card px-[18px] py-4">
       <div className="mb-[14px] text-[12.5px] font-extrabold tracking-[0.8px] text-dimmer">
@@ -42,14 +49,17 @@ export function ParentsCard({ parents }: { parents: Parent[] }) {
             </span>
           </div>
         ))}
-        <a href="#" className="flex items-center gap-3 pt-2">
+        <Link
+          href={`/kids/${kidId}/parent`}
+          className="flex items-center gap-3 pt-2"
+        >
           <span className="flex size-10 flex-none items-center justify-center rounded-full border-[1.5px] border-dashed border-dashed-ring text-photo-ink">
             <Icon name="plus" className="size-[18px]" />
           </span>
           <span className="text-[14.5px] font-extrabold text-accent-deep">
             Vincular otro padre
           </span>
-        </a>
+        </Link>
       </div>
     </div>
   );
