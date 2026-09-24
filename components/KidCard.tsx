@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Icon } from "./Icon";
 import type { Kid } from "@/lib/kids";
 
@@ -10,7 +11,7 @@ export function KidCard({ kid }: { kid: Kid }) {
         }`;
 
   return (
-    <a
+    <Link
       href={`/kids/${kid.id}`}
       className="flex min-w-0 items-center gap-[14px] rounded-[18px] border border-line bg-card p-4 shadow-[0_4px_14px_-12px_rgba(120,90,60,.5)] transition-[0.15s] hover:-translate-y-0.5 hover:border-[#F2A78E]"
     >
@@ -38,6 +39,6 @@ export function KidCard({ kid }: { kid: Kid }) {
       ) : (
         <Icon name="chevron-right" className="size-[18px] flex-none text-chevron" />
       )}
-    </a>
+    </Link>
   );
 }
