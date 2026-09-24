@@ -1,3 +1,19 @@
+export const ROOMS = ["Soles", "Lunas", "Estrellas"] as const;
+export type Room = (typeof ROOMS)[number];
+
+const MONTHS = [
+  "ene", "feb", "mar", "abr", "may", "jun",
+  "jul", "ago", "sep", "oct", "nov", "dic",
+] as const;
+
+const KID_AVATAR_PALETTE: string[] = [
+  "bg-avatar-bg text-avatar-ink",
+  "bg-avatar-pink-bg text-avatar-pink-ink",
+  "bg-avatar-green-bg text-avatar-green-ink",
+  "bg-avatar-yellow-bg text-avatar-yellow-ink",
+  "bg-avatar-purple-bg text-avatar-purple-ink",
+];
+
 export type ParentStatus = "active" | "pending";
 
 export interface Parent {
@@ -25,6 +41,59 @@ export interface Kid {
 
 // Sample placeholder values (birth dates, admissions and non-reference parents)
 // will be replaced by the future persistence/linking spec.
+
+export interface NewKidInput {
+  name: string;
+  birthDate: string; // "dd/mm/aaaa" en bruto
+  room: Room;
+  allergies?: string;
+  medicalNotes?: string;
+}
+
+export function createKid(input: NewKidInput): Kid {
+  const name = input.name.trim();
+  const [day, month, year] = input.birthDate.split("/").map(Number);
+  const birth = new Date(year, month - 1, day);
+
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age -= 1;
+  }
+
+  const allergyChip = input.allergies
+    ?.split(/[,\s]+/)
+    .find(Boolean)
+    ?.toUpperCase();
+
+  return {
+    id: slugify(name),
+    name,
+    initial: name.charAt(0).toUpperCase(),
+    avatarClasses: pickAvatar(name),
+    age,
+    room: input.room,
+    birthDate: `${birth.getDate()} ${MONTHS[birth.getMonth()]} ${birth.getFullYear()}`,
+    admission: `${MONTHS[today.getMonth()]} ${today.getFullYear()}`,
+    allergyChip,
+    allergies: input.allergies,
+    parents: [],
+  };
+}
+
+function slugify(name: string): string {
+  const normalized = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  return normalized.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function pickAvatar(name: string): string {
+  const hash = [...name].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return KID_AVATAR_PALETTE[hash % KID_AVATAR_PALETTE.length];
+}
 
 export const KIDS: Kid[] = [
   {
