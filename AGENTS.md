@@ -33,6 +33,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Las features grandes se desarrollan con los skills `.agents/skills/spec` (diseñar spec) y `.agents/skills/spec-impl` (implementarla aprobada). Nacen de `klerith/fernando-skills` y están fijados en `skills-lock.json`.
 - Las specs viven en `specs/` con naming `NN-slug.md` y estados `Draft → Approved/Aprobado → Implemented`. La carpeta `specs/` aún no existe; se crea con el primer spec.
 - `spec-impl` exige estado que signifique "Approved" y trabaja en ramas `spec-NN-slug` (controlado por `specs/.spec-config.yml`, `AutoCreateBranch: true` por defecto).
+- Agente `spec-verifier` (definido en `.opencode/agent/spec-verifier.md`): verifica los criterios de aceptación de un spec al terminar una implementación. Revisa, corrige y marca los checks (`- [ ]`/`- [x]`), valida pantallas con Playwright (evidencias en `.playwright/`) contra `References/pantallas/`, corre build/lint, revisa la consola del navegador y contrasta las APIs de código con las recomendaciones de Next.js 16 (Context7 + `node_modules/next/dist/docs/`). El código queda en la rama `spec-NN-slug`; lo invocas con `task` (subagent `spec-verifier`) cuando quieras validar un spec o al terminar una implementación.
 - Idioma: el repo trabaja en español (mensajes, specs, pantallas). Respeta el idioma del prompt usuario.
 
 ## Referencias de diseño (fuente de verdad visual)
