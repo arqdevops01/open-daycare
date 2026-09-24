@@ -1,6 +1,6 @@
 # SPEC 04 — Agregar niño (con salas Lunas y Estrellas)
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 02, SPEC 03
 > **Date:** 2026-09-24
 > **Objective:** Implementar `References/pantallas/agregar-nino.dc.html` como `/kids/new` (card full-screen sin sidebar; alergias y notas médicas opcionales; salas Soles/Lunas/Estrellas) y hacer que «Guardar» agregue el niño a la lista compartida en memoria con React Context, visible en el listado y el perfil durante la sesión.
