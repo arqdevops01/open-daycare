@@ -1,6 +1,6 @@
 # SPEC 06 — Crear publicación (y publicarla en el feed)
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01, SPEC 04
 > **Date:** 2026-09-24
 > **Objective:** Implementar `References/pantallas/crear-publicacion.dc.html` como `/posts/new` (card full-screen sin sidebar) accesible desde «Nueva publicación» de la Sidebar y el composer del feed, y hacer que «Publicar» agregue el post al feed en memoria (Context), visible en `/` durante la sesión.
