@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { KidsList } from "@/components/KidsList";
 import { Sidebar } from "@/components/Sidebar";
@@ -17,13 +18,13 @@ export default function KidsPage() {
                 Niños
               </h1>
             </div>
-            <a
-              href="#"
+            <Link
+              href="/kids/new"
               className="flex items-center gap-2 rounded-[14px] bg-linear-to-b from-brand-btn-a to-brand-btn-b px-[18px] py-[11px] text-[14.5px] font-extrabold text-white shadow-[0_8px_18px_-8px_rgba(238,129,100,.7)]"
             >
               <Icon name="plus" className="size-[17px]" />
               Agregar niño
-            </a>
+            </Link>
           </div>
           <KidsList />
         </div>
