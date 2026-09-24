@@ -1,17 +1,20 @@
 import { Icon, type IconName } from "./Icon";
 import { SIDEBAR } from "@/lib/feed";
 
+export type ActiveSection = "feed" | "kids";
+
 interface NavItem {
   label: string;
   icon: IconName;
-  active?: boolean;
+  id: string;
+  href: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Feed", icon: "home", active: true },
-  { label: "Niños", icon: "users" },
-  { label: "Avisos", icon: "bell" },
-  { label: "Mi cuenta", icon: "user" },
+  { id: "feed", label: "Feed", icon: "home", href: "/" },
+  { id: "kids", label: "Niños", icon: "users", href: "/kids" },
+  { id: "avisos", label: "Avisos", icon: "bell", href: "#" },
+  { id: "mi-cuenta", label: "Mi cuenta", icon: "user", href: "#" },
 ];
 
 const baseNavClass =
@@ -19,7 +22,11 @@ const baseNavClass =
 const activeNavClass = "bg-nav-active-bg font-extrabold text-nav-active-ink";
 const idleNavClass = "bg-transparent font-semibold text-nav-ink";
 
-export function Sidebar() {
+interface SidebarProps {
+  active?: ActiveSection;
+}
+
+export function Sidebar({ active = "feed" }: SidebarProps) {
   return (
     <aside className="sticky top-0 flex h-screen w-[248px] flex-none flex-col border-r border-line bg-card px-4 py-6">
       <a href="#" className="flex items-center gap-[11px] px-2 pb-[22px] pt-1">
@@ -47,10 +54,10 @@ export function Sidebar() {
       <nav className="flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => (
           <a
-            key={item.label}
-            href="#"
+            key={item.id}
+            href={item.href}
             className={`${baseNavClass} ${
-              item.active ? activeNavClass : idleNavClass
+              item.id === active ? activeNavClass : idleNavClass
             }`}
           >
             <Icon name={item.icon} className="size-[19px] flex-none" />
