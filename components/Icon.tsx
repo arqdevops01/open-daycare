@@ -23,6 +23,8 @@ export const ICON_NAMES = [
   "chevron-left",
   "chevron-right",
   "alert",
+  "close",
+  "send",
 ] as const;
 
 export type IconName = (typeof ICON_NAMES)[number];
@@ -123,6 +125,18 @@ const ICONS: Record<IconName, IconConfig> = {
       </>
     ),
     strokeWidth: 2.2,
+  },
+  close: {
+    children: <path d="M18 6 6 18M6 6l12 12" />,
+    strokeWidth: 2.2,
+  },
+  send: {
+    children: (
+      <>
+        <path d="m22 2-7 20-4-9-9-4z" />
+        <path d="M22 2 11 13" />
+      </>
+    ),
   },
 };
 
