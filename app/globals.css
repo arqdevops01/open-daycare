@@ -55,6 +55,14 @@
   --color-activity-ink: #2e89a6;
   --color-announcement-badge: #ccd8f4;
   --color-announcement-ink: #4e72c8;
+  --color-paper: #fbf4ec;
+  --color-field-border: #eadfd0;
+  --color-field-focus: #f2a78e;
+  --color-success: #5fb97e;
+  --color-invite-bg: #fbf1d6;
+  --color-invite-ink: #8a7234;
+  --color-hero-grad-a: #f6a98e;
+  --color-hero-grad-c: #ec7e62;
   --font-display: var(--font-fredoka);
   --font-sans: var(--font-nunito);
 }

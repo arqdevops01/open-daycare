@@ -1,6 +1,6 @@
 # SPEC 02 — Niños (listado) y Perfil de niño
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-09-24
 > **Objective:** Implementar `References/pantallas/ninos.dc.html` y `perfil-nino.dc.html` como las rutas `/kids` y `/kids/[id]`, descompuestas en componentes de React con el estilo visual idéntico al mockup, búsqueda por nombre en el cliente y sin backend ni persistencia.
