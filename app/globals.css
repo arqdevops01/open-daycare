@@ -55,6 +55,11 @@
   --color-activity-ink: #2e89a6;
   --color-announcement-badge: #ccd8f4;
   --color-announcement-ink: #4e72c8;
+  --color-nap-badge: #e7dcf6;
+  --color-nap-ink: #7b5fc0;
+  --color-type-food: #9a7b1e;
+  --color-type-nap: #e7dcf6;
+  --color-type-activity: #2e89a6;
   --color-info-bg: #e3ecfb;
   --color-info-ink: #3f5694;
   --color-pill-bg: #ccd8f4;
