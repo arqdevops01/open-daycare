@@ -32,7 +32,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Flujo de trabajo: spec-driven
 
 - Las features grandes se desarrollan con los skills `.agents/skills/spec` (diseñar spec) y `.agents/skills/spec-impl` (implementarla aprobada). Nacen de `klerith/fernando-skills` y están fijados en `skills-lock.json`.
-- Las specs viven en `specs/` con naming `NN-slug.md` y estados `Draft → Approved/Aprobado → Implemented`. La carpeta `specs/` aún no existe; se crea con el primer spec.
+- Las specs viven en `specs/` con naming `NN-slug.md` y estados `Draft → Approved/Aprobado → Implemented`.
+- **Regla dura: si una spec tiene que ver con la base de datos, va en `specs/database/`, nunca en la raíz de `specs/`.** Aplica a cualquier spec que toque el esquema/DB: DDL (tablas, columnas, tipos, vistas), índices, constraints, políticas RLS, functions, triggers, migraciones, seeds/datos, permisos/RBAC, o que sea requisito/consumidor de cambios de esquema. Naming igual (`specs/database/NN-slug.md`) y numeración independiente y continua dentro de la carpeta (la primera es `01-`). Crea `specs/database/` si no existe. Las specs de UI/feature sin cambios de base siguen en `specs/`. Cuando sea ambigua, pregunta antes de escribir.
 - `spec-impl` exige estado que signifique "Approved" y trabaja en ramas `spec-NN-slug` (controlado por `specs/.spec-config.yml`, `AutoCreateBranch: true` por defecto).
 - Agente `spec-verifier` (definido en `.opencode/agent/spec-verifier.md`): verifica los criterios de aceptación de un spec al terminar una implementación. Revisa, corrige y marca los checks (`- [ ]`/`- [x]`), valida pantallas con Playwright (evidencias en `.playwright/`) contra `References/pantallas/`, corre build/lint, revisa la consola del navegador y contrasta las APIs de código con las recomendaciones de Next.js 16 (Context7 + `node_modules/next/dist/docs/`). El código queda en la rama `spec-NN-slug`; lo invocas con `task` (subagent `spec-verifier`) cuando quieras validar un spec o al terminar una implementación.
 - Idioma: el repo trabaja en español (mensajes, specs, pantallas). Respeta el idioma del prompt usuario.
@@ -53,7 +54,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **Archivos locales:** este proyecto NO usa esquemas declarativos (no hay `supabase/config.toml` ni `supabase/schemas/`); la historia vive en `supabase/migrations/`. Mantén ese directorio como espejo de la historia remota — `supabase link` + `supabase db pull` sirve para regenerarlo/actualizarlo desde el proyecto remoto, no para reemplazar la migración que acabas de crear a mano.
 - **Antes de escribir SQL:** carga los dos skills de Supabase (`supabase` y `supabase-postgres-best-practices`) y respeta sus checklists (RLS correctamente政策eada, nada de `user_metadata` en authz, cuidado con `SECURITY DEFINER`, índices para los accesos declarados en las políticas).
 - **Regenerar tipos:** tras cada migración que cambie el esquema, refresca los tipos TypeScript (`supabase_generate_typescript_types`) y commitéalos junto al código.
-- En un spec, la migración es parte de la implementación: se commitea en la rama `spec-NN-slug` junto al código que la usa, y el `spec-verifier` la revisa.
+- En un spec, la migración es parte de la implementación: se commitea en la rama `spec-NN-slug` junto al código que la usa, y el `spec-verifier` la revisa. Toda spec de base de datos se escribe en `specs/database/` (ver la regla dura en la sección de flujo spec-driven).
 
 ## Referencias de diseño (fuente de verdad visual)
 
