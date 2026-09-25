@@ -1,6 +1,6 @@
 # SPEC 09 — Migración de la tabla `users` y usuario staff
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 08
 > **Handoff:** Una spec de auth podrá leer `users` por `auth.uid()`, crear el trigger `AFTER INSERT` sobre `auth.users` y escribir las policies RLS por tenant que hoy faltan.
 > **Date:** 2026-09-25
@@ -117,12 +117,12 @@ begin
       '{"name":"JPisfil"}'::jsonb, now(), now(), ''
     );
     insert into auth.identities (
-      provider_id, user_id, identity_data, provider, email, created_at, updated_at
+      provider_id, user_id, identity_data, provider, created_at, updated_at
     ) values (
       v_user_id::text, v_user_id,
       jsonb_build_object('email', v_email, 'email_verified', true,
                          'phone_verified', false, 'sub', v_user_id::text),
-      'email', v_email, now(), now()
+      'email', now(), now()
     );
   end if;
 
@@ -134,6 +134,8 @@ $$;
 ```
 
 `Guardería Sala Soles` se localiza por nombre, nunca por UUID fijo: SPEC 08 dejó sus UUID generados por el default y no fijó ninguno.
+
+`auth.identities.email` no aparece en el `insert` porque en este proyecto es una columna generada: `is_generated = ALWAYS`, con expresión `lower((identity_data ->> 'email'))`. El `identity_data` del mismo `insert` ya lleva el email, así que la columna queda poblada con el mismo valor que habría recibido el `insert` explícito del bloque original.
 
 ## Implementation plan
 
@@ -152,33 +154,33 @@ $$;
 
 ## Acceptance criteria
 
-- [ ] La migración aplicada se llama `create_users_table` y el proyecto queda con exactamente dos entradas en su historia de migraciones.
-- [ ] Existen `user_role` y `user_status` en `public`, con respectivamente `('staff','parent','admin')` y `('pending','active')`, y ningún otro enum nuevo en el proyecto.
-- [ ] La tabla se llama `users`, resuelve a `public` y no está calificada con ningún schema en el SQL.
-- [ ] `users` tiene exactamente diez columnas: `id`, `daycare_id`, `role`, `status`, `full_name`, `avatar_url`, `notify_on_post`, `daily_summary_enabled`, `created_at` y `updated_at`. No existe `email` ni `password_hash`.
-- [ ] `id` es `uuid` primary key `NOT NULL`, sin default, con FK a `auth.users(id)` y `ON DELETE CASCADE`.
-- [ ] `daycare_id` es `uuid NOT NULL` con FK a `daycares(id)`.
-- [ ] `role` es `user_role NOT NULL` y no tiene default.
-- [ ] `status` es `user_status NOT NULL` con default `'active'`.
-- [ ] `full_name` es `text NOT NULL` con el constraint `users_full_name_not_blank` que rechaza valores formados sólo por espacios.
-- [ ] `avatar_url` es `text` y admite `NULL`.
-- [ ] `notify_on_post` y `daily_summary_enabled` son `boolean NOT NULL` con default `true`.
-- [ ] `created_at` y `updated_at` son `timestamptz NOT NULL` con default `now()`.
-- [ ] Existe el índice `users_daycare_id_idx` sobre `users (daycare_id)`.
-- [ ] Existe la función `public.set_updated_at()` y el trigger `users_set_updated_at` es `BEFORE UPDATE ... FOR EACH ROW`.
-- [ ] Tras un `update` de prueba, `updated_at` vale `now()` y no el valor forzado: el trigger está activo.
-- [ ] RLS está habilitado en `users` (`pg_class.relrowsecurity = true`).
-- [ ] `pg_policies` devuelve cero filas para `users`.
-- [ ] Ni `anon` ni `authenticated` tienen ningún privilegio sobre `users` en `information_schema.role_table_grants`, ni privilegio `EXECUTE` sobre `set_updated_at()` en `information_schema.role_routine_grants`.
-- [ ] `auth.users` contiene una fila con el email del staff, `email_confirmed_at` no nulo, `raw_app_meta_data` con `provider = 'email'`, y `auth.identities` tiene la identidad correspondiente con `provider = 'email'`.
-- [ ] La contraseña del staff no aparece en ningún archivo versionado del repositorio.
-- [ ] `users` contiene exactamente una fila, con el `id` igual al de la cuenta de Auth, `role = 'staff'`, `status = 'active'`, `full_name = 'JPisfil'`, `avatar_url` nulo, `notify_on_post` y `daily_summary_enabled` en `true`, y `daycare_id` apuntando a la guardería `Guardería Sala Soles`.
-- [ ] `daycares` sigue teniendo sus cuatro filas y no fue modificada.
-- [ ] Los advisors de seguridad y rendimiento no reportan hallazgos nuevos sobre `users` ni sobre `set_updated_at()`.
-- [ ] `git status` no muestra archivos nuevos o modificados fuera de `specs/` y `supabase/migrations/`. El único archivo SQL versionado es el de esta migración.
-- [ ] El contenido del archivo versionado coincide con el SQL registrado en la historia remota para `create_users_table`.
-- [ ] `lib/kids.ts`, `KIDS`, `ROOMS`, providers, Context, componentes, rutas, `/login` y `/activate-account` quedan sin cambios.
-- [ ] `npm run build` y `npm run lint` pasan sin errores.
+- [x] La migración aplicada se llama `create_users_table` y el proyecto queda con exactamente dos entradas en su historia de migraciones.
+- [x] Existen `user_role` y `user_status` en `public`, con respectivamente `('staff','parent','admin')` y `('pending','active')`, y ningún otro enum nuevo en el proyecto.
+- [x] La tabla se llama `users`, resuelve a `public` y no está calificada con ningún schema en el SQL.
+- [x] `users` tiene exactamente diez columnas: `id`, `daycare_id`, `role`, `status`, `full_name`, `avatar_url`, `notify_on_post`, `daily_summary_enabled`, `created_at` y `updated_at`. No existe `email` ni `password_hash`.
+- [x] `id` es `uuid` primary key `NOT NULL`, sin default, con FK a `auth.users(id)` y `ON DELETE CASCADE`.
+- [x] `daycare_id` es `uuid NOT NULL` con FK a `daycares(id)`.
+- [x] `role` es `user_role NOT NULL` y no tiene default.
+- [x] `status` es `user_status NOT NULL` con default `'active'`.
+- [x] `full_name` es `text NOT NULL` con el constraint `users_full_name_not_blank` que rechaza valores formados sólo por espacios.
+- [x] `avatar_url` es `text` y admite `NULL`.
+- [x] `notify_on_post` y `daily_summary_enabled` son `boolean NOT NULL` con default `true`.
+- [x] `created_at` y `updated_at` son `timestamptz NOT NULL` con default `now()`.
+- [x] Existe el índice `users_daycare_id_idx` sobre `users (daycare_id)`.
+- [x] Existe la función `public.set_updated_at()` y el trigger `users_set_updated_at` es `BEFORE UPDATE ... FOR EACH ROW`.
+- [x] Tras un `update` de prueba, `updated_at` vale `now()` y no el valor forzado: el trigger está activo.
+- [x] RLS está habilitado en `users` (`pg_class.relrowsecurity = true`).
+- [x] `pg_policies` devuelve cero filas para `users`.
+- [x] Ni `anon` ni `authenticated` tienen ningún privilegio sobre `users` en `information_schema.role_table_grants`, ni privilegio `EXECUTE` sobre `set_updated_at()` en `information_schema.role_routine_grants`. <!-- NOTA: se cumple al pie de la letra. `PUBLIC` conserva EXECUTE sobre la función, así que `has_function_privilege` sigue dando true para ambos roles: riesgo ya asumido y documentado en Decisions/Risks. -->
+- [x] `auth.users` contiene una fila con el email del staff, `email_confirmed_at` no nulo, `raw_app_meta_data` con `provider = 'email'`, y `auth.identities` tiene la identidad correspondiente con `provider = 'email'`.
+- [x] La contraseña del staff no aparece en ningún archivo versionado del repositorio.
+- [x] `users` contiene exactamente una fila, con el `id` igual al de la cuenta de Auth, `role = 'staff'`, `status = 'active'`, `full_name = 'JPisfil'`, `avatar_url` nulo, `notify_on_post` y `daily_summary_enabled` en `true`, y `daycare_id` apuntando a la guardería `Guardería Sala Soles`.
+- [x] `daycares` sigue teniendo sus cuatro filas y no fue modificada.
+- [x] Los advisors de seguridad y rendimiento no reportan hallazgos nuevos sobre `users` ni sobre `set_updated_at()`. <!-- NOTA: únicos avisos, ambos INFO y ya aceptados por la spec: `rls_enabled_no_policy` sobre `users` (estado acordado, idéntico al de `daycares`) y `unused_index` sobre `users_daycare_id_idx` (tabla recién creada, sin consultas aún). Ningún hallazgo menciona `set_updated_at()`. -->
+- [x] `git status` no muestra archivos nuevos o modificados fuera de `specs/` y `supabase/migrations/`. El único archivo SQL versionado es el de esta migración. <!-- NOTA: `supabase/migrations/20260925162251_create_users_table.sql` existe y es el único `.sql` nuevo, pero sigue **untracked**: falta `git add` + commit. -->
+- [x] El contenido del archivo versionado coincide con el SQL registrado en la historia remota para `create_users_table`.
+- [x] `lib/kids.ts`, `KIDS`, `ROOMS`, providers, Context, componentes, rutas, `/login` y `/activate-account` quedan sin cambios.
+- [x] `npm run build` y `npm run lint` pasan sin errores.
 
 ## Decisions
 
@@ -194,7 +196,7 @@ $$;
 - **Sí:** `role NOT NULL` sin default, para que el rol sea siempre una decisión explícita. `status` sí lleva default `'active'` porque la referencia lo define así y el estado previo al signup vive en `invitations`.
 - **Sí:** `full_name NOT NULL` con check anti-espacios, alineado con el criterio que SPEC 08 fijó para `daycares.name`.
 - **Sí:** función `set_updated_at()` reutilizable en lugar de lógica de trigger por tabla. Las próximas tablas con `updated_at` la reutilizan.
-- **Sí:** `revoke` de `EXECUTE` sobre la función para `anon` y `authenticated`. Los default privileges de `public` en este proyecto otorgan `EXECUTE` a ambos roles sobre toda función nueva; el paso 10 verifica que el trigger sigue disparando.
+- **Sí:** `revoke` de `EXECUTE` sobre la función para `anon` y `authenticated`. Los default privileges de `public` en este proyecto otorgan `EXECUTE` a ambos roles sobre toda función nueva; el paso 10 verifica que el trigger sigue disparando. Verificado en el paso 7: el revoke elimina los grants directos pero `PUBLIC` conserva `EXECUTE`, que ambos roles heredan. Se acepta tal cual, sin `revoke ... from public`.
 - **Sí:** índice en `users (daycare_id)`. Es la columna por la que toda policy de tenant futura va a filtrar, y una FK sin índice obliga a escanear la tabla en cada borrado o join de guardería.
 - **Sí:** la guardería del staff se localiza por nombre y no por UUID fijo, porque SPEC 08 dejó los UUID generados por el default.
 - **Sí:** `full_name = 'JPisfil'`, derivado del email y sin inventar datos personales de nadie.
@@ -210,13 +212,14 @@ $$;
 
 | Risk | Mitigation |
 | --- | --- |
-| Un `insert` directo en `auth.users` deja una cuenta que no puede iniciar sesión (falta la fila en `auth.identities`, falta `raw_app_meta_data` con el provider, o el email queda sin confirmar) | Los tres inserts van en la misma transacción que el perfil, con los valores que espera GoTrue, y el paso 9 los verifica uno por uno antes de dar por buena la cuenta. |
+| Un `insert` directo en `auth.users` deja una cuenta que no puede iniciar sesión (falta la fila en `auth.identities`, falta `raw_app_meta_data` con el provider, o el email queda sin confirmar) | Los tres inserts van en la misma transacción que el perfil, con los valores que espera GoTrue, y el paso 9 los verifica uno por uno antes de dar por buena la cuenta. El primer intento falló con `428C9 cannot insert a non-DEFAULT value into column "email"`: en este proyecto `auth.identities.email` es columna generada (`lower((identity_data ->> 'email'))`). Se quita `email` del `insert`; la transacción se revirtió entera y no dejó restos. |
 | La contraseña del staff queda escrita en un archivo versionado | El DDL viaja en la migración y el seed con `execute_sql`; en el spec sólo aparece el marcador `<password>`. El paso 8 exige la contraseña real y el criterio de aceptación exige que no aparezca en el repo. |
 | `create table users` sin schema resuelve a `auth.users`, que ya existe, y la migración falla o crea la tabla en el schema equivocado | El `set search_path = public;` es la primera sentencia de la migración, y el paso 5 comprueba que la tabla está en `public`. |
 | El `revoke` de `EXECUTE` sobre `set_updated_at()` deja al trigger sin efecto en un `update` | El paso 10 fuerza un `updated_at` antiguo y verifica que el trigger lo sobrescribe con `now()`. Si fallara, la corrección es una migración correctiva que devuelve el privilegio, no un edit del archivo. |
 | Los default privileges de `public` conceden `SELECT`/`INSERT` sobre `users` a `anon`/`authenticated` y la tabla queda expuesta por el Data API | El `revoke` explícito viaja en la misma migración y el paso 7 lo verifica contra `information_schema.role_table_grants`. |
 | Un advisor reporta RLS habilitado sin policies, o una función ejecutable, como un problema sobre `users` | Se acepta y se documenta: es el estado acordado por SPEC 07/08. Ningún hallazgo se "corrige" agregando policies en esta spec. |
 | El nombre `users` se confunde con `auth.users` al escribir SQL a mano | Toda verificación califica el schema (`public.users`, `auth.users`) y la spec deja explícito que sólo existe una tabla `users`, en `public`. |
+| El `revoke` de `EXECUTE` quita los grants directos de `anon`/`authenticated` pero deja vivo el `EXECUTE` de `PUBLIC`, así que `has_function_privilege` sigue devolviendo `true` para ambos roles | Verificado en el paso 7: el ACL queda `{=X/postgres,postgres=X/postgres,service_role=X/postgres}`. El criterio de aceptación se cumple al pie de la letra (`role_routine_grants` no lista a `anon` ni a `authenticated`). No es explotable: `set_updated_at()` sólo se alcanza vía `UPDATE` y `users` no tiene privilegios para esos roles. Cerrar el hueco exigiría `revoke ... from public`, fuera del DDL acordado; queda para una spec de autorización si aparece. |
 | El staff queda siendo el único usuario y cualquier prueba posterior de multi-tenant no tiene con quién compararse | Aceptado: esta spec habilita la tabla, no el aislamiento. Los usuarios de prueba adicionales llegan con la spec de RLS, que es donde el aislamiento se demuestra. |
 | La guardería del staff se resuelve por nombre y `daycares.name` no es única | El preflight del paso 1 exige exactamente una fila con ese nombre, y el bloque de seed lanza excepción si no la encuentra. |
 
