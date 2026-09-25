@@ -1,6 +1,6 @@
 # SPEC 08 — Migración de la tabla `daycares`
 
-> **Status:** Borrador
+> **Status:** Aprobado
 > **Depends on:** SPEC 07
 > **Date:** 2026-09-25
 > **Objective:** Crear y poblar la tabla `daycares` en el proyecto Supabase aplicando el contrato fijado por SPEC 07 en una única migración versionada.
