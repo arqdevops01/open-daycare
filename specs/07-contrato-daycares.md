@@ -2,6 +2,7 @@
 
 > **Status:** Aprobado
 > **Depends on:** Ninguna
+> **Handoff:** `specs/08-migracion-daycares.md` — la spec de migración declara `Depends on: SPEC 07`, crea la tabla y sus cuatro fixtures en una misma migración, y verifica el resultado antes de reemplazar cualquier mock.
 > **Date:** 2026-09-25
 > **Objective:** Definir el contrato de datos de la tabla `daycares` —tres columnas con defaults seguros, RLS privado y cuatro guarderías iniciales— para que una spec posterior aplique la migración sin alterar los mocks actuales.
 
