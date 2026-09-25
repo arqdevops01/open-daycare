@@ -1,6 +1,6 @@
 # SPEC 08 — Migración de la tabla `daycares`
 
-> **Status:** Borrador
+> **Status:** Implementado
 > **Depends on:** SPEC 07
 > **Date:** 2026-09-25
 > **Objective:** Crear y poblar la tabla `daycares` en el proyecto Supabase aplicando el contrato fijado por SPEC 07 en una única migración versionada.
@@ -10,10 +10,12 @@
 **In:**
 
 - Una única migración versionada, aplicada contra el proyecto Supabase remoto mediante `apply_migration` del servidor MCP.
+- Un archivo de migración versionado en el repositorio, en `supabase/migrations/20260925140421_create_daycares_table.sql`, con el mismo SQL aplicado en el remoto.
 - El DDL exacto de `daycares` tal como lo fijó SPEC 07: `id uuid`, `name text`, `created_at timestamptz`.
 - RLS habilitado, cero policies y revocación de privilegios para `anon` y `authenticated`.
 - Inserción de las cuatro guarderías de SPEC 07 con UUIDs generados por `gen_random_uuid()`.
 - Verificación posterior: historia de migración, estructura de columnas, RLS, ausencia de policies, ausencia de privilegios y contenido de la tabla.
+- Verificación de que el archivo versionado coincide con el SQL registrado en la historia remota.
 - Revisión de advisors de seguridad y rendimiento tras aplicar.
 
 **Out of scope (for future specs):**
@@ -23,7 +25,6 @@
 - Crear `users`, `rooms`, `children` o cualquier otra tabla del esquema de referencia.
 - Escribir policies RLS, autorización por tenant, roles o permisos de negocio.
 - Instalar Supabase CLI, ejecutar `supabase init`, `supabase link` o `db push`.
-- Commitar un archivo `.sql` al repositorio.
 - Agregar `updated_at`, índices, triggers o `UNIQUE (name)`.
 - Habilitar el acceso de la app a la tabla. RLS sin policies la deja inutilizable desde el cliente, y es el comportamiento acordado en SPEC 07.
 
@@ -48,6 +49,8 @@ insert into daycares (name) values
   ('Guardería Arcoíris');
 ```
 
+El mismo SQL, sin reescribir ni reordenar, se versiona en el repositorio como `supabase/migrations/20260925140421_create_daycares_table.sql`. El nombre de archivo deriva de la versión y el nombre registrados en `supabase_migrations.schema_migrations`, de modo que el archivo y la historia remota son el mismo hecho visto de dos maneras.
+
 Convenciones heredadas de SPEC 07:
 
 - La tabla se llama `daycares` y no se antepone ningún schema, por lo que resuelve a `public`.
@@ -67,6 +70,7 @@ Convenciones heredadas de SPEC 07:
 6. Verificar los datos: la tabla contiene exactamente cuatro filas, con nombres que coinciden carácter a carácter con los cuatro fixtures, UUIDs distintos y `created_at` no nulo.
 7. Correr los advisors de seguridad y de rendimiento y confirmar que no reportan hallazgos nuevos atribuibles a `daycares`.
 8. Confirmar que el árbol de trabajo del repositorio no cambió: `git status` sigue mostrando únicamente los archivos de specs.
+9. Versionar el SQL aplicado en `supabase/migrations/20260925140421_create_daycares_table.sql`, tomado literalmente de la entrada `create_daycares_table` en `supabase_migrations.schema_migrations`, y verificar que `git status` sólo muestra ese archivo nuevo además de los specs.
 
 ## Acceptance criteria
 
@@ -84,17 +88,19 @@ Convenciones heredadas de SPEC 07:
 - [ ] Los cuatro `id` son UUID distintos y ninguno viene de un valor fijo: los generó el default.
 - [ ] Los cuatro `created_at` son no nulos.
 - [ ] Los advisors de seguridad y rendimiento no reportan hallazgos nuevos sobre `daycares`.
-- [ ] `git status` no muestra ningún archivo nuevo o modificado fuera de `specs/`. En particular no hay archivos `.sql` en el repositorio.
+- [ ] `git status` no muestra ningún archivo nuevo o modificado fuera de `specs/` y `supabase/migrations/`. El único archivo SQL versionado es `supabase/migrations/20260925140421_create_daycares_table.sql`.
+- [ ] El contenido del archivo versionado coincide con el SQL registrado en `supabase_migrations.schema_migrations` para `create_daycares_table`.
 - [ ] `lib/kids.ts`, `KIDS`, `ROOMS`, providers, Context, componentes y rutas quedan sin cambios.
 - [ ] `npm run build` y `npm run lint` pasan sin errores.
 
 ## Decisions
 
 - **Sí:** aplicar con `apply_migration` del servidor MCP. El proyecto no tiene `supabase/` inicializado, no hay Supabase CLI instalado y sólo existe `SUPABASE_DB_PASSWORD` en el entorno, así que el flujo de la CLI agregaría instalación, `init` y `link` sin beneficio para una única migración.
-- **No:** versionar un archivo `.sql` en el repositorio. Se acordó que la fuente de verdad del SQL es este spec; el archivo duplicaría el contrato y podría desincronizarse.
+- **Sí:** versionar un archivo `.sql` en el repositorio, en `supabase/migrations/`. Revisión posterior: se mantiene la fuente de verdad en este spec, pero además se deja un respaldo local comparable contra la historia remota, que se regenera con `supabase db pull` cuando la CLI esté disponible. El riesgo de desincronización pasa a estar cubierto por el paso 9 del plan, que compara el archivo contra `supabase_migrations.schema_migrations`.
+- **No:** `supabase init` ni `supabase/config.toml`. La carpeta `supabase/migrations/` se crea a mano con el único archivo de esta spec. Quien corra `supabase init` o `supabase db push` más adelante debe verificar que no intente re-aplicar la versión `20260925140421`, que ya está registrada en la historia remota.
 - **Sí:** aplicar contra el proyecto remoto directamente. Es la primera migración de un proyecto sin tablas ni datos, y una dev branch agregaría costo y pasos sin proteger nada.
 - **No:** iterar el SQL con `execute_sql` antes de aplicar. El SQL está determinista y completo en SPEC 07; iterar sobre el remoto dejaría estado sin historia de migración.
-- **No:** Supabase CLI, `supabase init`, `supabase link` o `db push`.
+- **No:** Supabase CLI, `supabase init`, `supabase link` o `db push`. Sólo se versiona el archivo de la migración ya aplicada.
 - **Sí:** tabla, RLS, revocación y fixtures en una misma migración, como exige SPEC 07.
 - **Sí:** RLS habilitado y cero policies. Se acepta que la tabla quede ilegible desde el cliente: es el diseño acordado en SPEC 07 hasta que exista `users` y un spec de autorización por tenant.
 - **No:** policies RLS de ningún tipo en esta spec.
@@ -113,6 +119,7 @@ Convenciones heredadas de SPEC 07:
 | Los `default privileges` de Supabase conceden acceso a `anon`/`authenticated` y la tabla queda expuesta por el Data API | El `revoke` explícito viaja en la misma migración y el paso 5 lo verifica contra `information_schema.role_table_grants`. |
 | Un advisor reporta RLS habilitado sin policies como un problema | Se acepta: es el estado deseado según SPEC 07. Cualquier hallazgo se documenta, no se "corrige" agregando policies. |
 | Los fixtures se interpretan como guarderías reales de producción | `Guardería Sala Soles` es el único nombre que la app ya muestra, y sigue siendo un dato de desarrollo. No se deriva comportamiento especial de ninguna fila. |
+| El archivo `.sql` versionado se desincroniza del SQL realmente aplicado en la historia remota | El nombre del archivo deriva de la versión y el nombre de la entrada de `supabase_migrations.schema_migrations`, y el paso 9 compara el contenido del archivo contra esa misma entrada. `supabase db pull` regenera el archivo cuando la CLI esté disponible. |
 | El proyecto remoto queda con una tabla inaccesible para la app y alguien asume que es un bug | La app no consume la tabla en esta etapa. Cualquier lectura real va en una spec posterior con policies. |
 
 ## What is **not** in this spec
@@ -121,7 +128,7 @@ Convenciones heredadas de SPEC 07:
 - Policies RLS, `users`, roles o autorización por tenant.
 - `rooms`, `children` y el resto de las tablas del esquema de referencia.
 - `updated_at`, índices, triggers, `UNIQUE (name)` o relaciones.
-- Supabase CLI, `supabase init`, `supabase link`, `db push` o archivos `.sql` en el repo.
+- Supabase CLI, `supabase init`, `supabase link` o `db push`.
 - Habilitar acceso a la tabla desde el cliente.
 
 Cada uno de esos, si llega, va en su propia spec.
