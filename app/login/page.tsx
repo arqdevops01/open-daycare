@@ -1,7 +1,13 @@
+import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/LoginForm";
 import { Icon } from "@/components/Icon";
+import { getSessionClaims } from "@/lib/supabase/session";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const claims = await getSessionClaims();
+
+  if (claims !== null) redirect("/");
+
   return (
     <div className="grid min-h-screen bg-paper grid-cols-[1.05fr_1fr]">
       <div className="relative flex overflow-hidden flex-col justify-between bg-[linear-gradient(155deg,var(--color-hero-grad-a)_0%,var(--color-brand-gradient-b)_45%,var(--color-hero-grad-c)_100%)] px-[60px] py-14 text-white">

@@ -2,11 +2,14 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { KidsList } from "@/components/KidsList";
 import { Sidebar } from "@/components/Sidebar";
+import { getCurrentUserProfile } from "@/lib/users";
 
-export default function KidsPage() {
+export default async function KidsPage() {
+  const profile = await getCurrentUserProfile();
+
   return (
     <div className="flex min-h-screen bg-canvas">
-      <Sidebar active="kids" />
+      <Sidebar active="kids" userName={profile.fullName} userInitial={profile.initial} />
       <main className="h-screen min-w-0 flex-1 overflow-y-auto">
         <div className="mx-auto w-full max-w-[880px] px-10 pb-20 pt-[34px]">
           <div className="mb-[22px] flex items-end justify-between gap-4">

@@ -5,13 +5,18 @@ import { NewPostComposer } from "./NewPostComposer";
 import { PostCard } from "./PostCard";
 import { usePosts } from "./PostsProvider";
 
-export function FeedContent() {
+interface FeedContentProps {
+  firstName: string;
+  initial: string;
+}
+
+export function FeedContent({ firstName, initial }: FeedContentProps) {
   const { posts } = usePosts();
 
   return (
     <>
-      <FeedHeader />
-      <NewPostComposer />
+      <FeedHeader firstName={firstName} />
+      <NewPostComposer initial={initial} />
       <div className="mb-[14px] flex items-center gap-[14px]">
         <span className="text-[12.5px] font-extrabold tracking-[0.8px] text-dimmer">
           PUBLICADO HOY

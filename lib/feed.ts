@@ -37,15 +37,12 @@ export interface NewPostInput {
 export interface SidebarData {
   roomName: string;
   user: {
-    name: string;
     role: string;
-    initial: string;
   };
 }
 
 export interface FeedHeaderData {
   eyebrow: string;
-  greeting: string;
   meta: string;
 }
 
@@ -59,15 +56,12 @@ export interface KindStyle {
 export const SIDEBAR: SidebarData = {
   roomName: "Sala Soles",
   user: {
-    name: "Caro Giménez",
     role: "Maestra · Soles",
-    initial: "C",
   },
 };
 
 export const FEED_HEADER: FeedHeaderData = {
   eyebrow: "GUARDERÍA · SALA SOLES",
-  greeting: "Buenas, Caro",
   meta: "12 niños · martes 17 jun",
 };
 

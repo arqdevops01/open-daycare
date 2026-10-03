@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { AddKidForm } from "@/components/AddKidForm";
+import { requireUser } from "@/lib/supabase/session";
 
-export default function NewKidPage() {
+export default async function NewKidPage() {
+  await requireUser();
+
   return (
     <div className="flex min-h-screen items-start justify-center bg-canvas px-6 py-10">
       <div className="w-full max-w-[520px] overflow-hidden rounded-[24px] border border-line bg-paper shadow-[0_20px_50px_-24px_rgba(63,54,46,.35)]">
