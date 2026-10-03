@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { logout } from "@/app/actions/auth";
 import { Icon, type IconName } from "./Icon";
 import { SIDEBAR } from "@/lib/feed";
 
@@ -78,13 +79,15 @@ export function Sidebar({ active = "feed" }: SidebarProps) {
             </div>
             <div className="text-[12px] text-muted">{SIDEBAR.user.role}</div>
           </div>
-          <a
-            href="#"
-            title="Cerrar sesión"
-            className="flex size-8 flex-none items-center justify-center rounded-[10px] bg-canvas text-soft"
-          >
-            <Icon name="logout" className="size-4" />
-          </a>
+          <form action={logout}>
+            <button
+              type="submit"
+              title="Cerrar sesión"
+              className="flex size-8 cursor-pointer flex-none items-center justify-center rounded-[10px] bg-canvas text-soft"
+            >
+              <Icon name="logout" className="size-4" />
+            </button>
+          </form>
         </div>
       </div>
     </aside>
