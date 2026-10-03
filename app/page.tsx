@@ -1,7 +1,10 @@
 import { FeedContent } from "@/components/FeedContent";
 import { Sidebar } from "@/components/Sidebar";
+import { requireUser } from "@/lib/supabase/session";
 
-export default function Home() {
+export default async function Home() {
+  await requireUser();
+
   return (
     <div className="flex min-h-screen bg-canvas">
       <Sidebar />

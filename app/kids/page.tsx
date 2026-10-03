@@ -2,8 +2,11 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { KidsList } from "@/components/KidsList";
 import { Sidebar } from "@/components/Sidebar";
+import { requireUser } from "@/lib/supabase/session";
 
-export default function KidsPage() {
+export default async function KidsPage() {
+  await requireUser();
+
   return (
     <div className="flex min-h-screen bg-canvas">
       <Sidebar active="kids" />
