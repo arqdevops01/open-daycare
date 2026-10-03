@@ -1,6 +1,6 @@
 # SPEC 10 — Autenticación por email y contraseña con protección de rutas
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 03, SPEC 09
 > **Date:** 2026-09-26
 > **Objective:** Conectar `/login` a Supabase Auth con email y contraseña reales y exigir sesión en todas las rutas de la app salvo `/login` y `/activate-account`, con verificación en `proxy.ts` y en cada página protegida.
@@ -148,27 +148,27 @@ Cada paso es un commit por sí solo y deja la app funcionando. El orden importa:
 
 ## Acceptance criteria
 
-- [ ] `grep -rn "getSession(" lib/ app/` no devuelve resultados: la verificación de sesión usa `getClaims()` en los tres lugares (proxy, `getSessionClaims`, verificación de la acción).
-- [ ] La caja de error del login replica el patrón de `components/AddKidForm.tsx:66-73`: `role="alert"` y clases `bg-alert-bg` / `text-alert-title`; no se agregaron tokens de color nuevos a `app/globals.css`.
-- [ ] `npm run build` y `npm run lint` pasan sin errores.
-- [ ] Sin cookies de sesión, una visita a `/` termina en `/login`.
-- [ ] Sin cookies de sesión, una visita a `/kids`, `/kids/new`, `/kids/<cualquier-id>`, `/kids/<id>/parent` y `/posts/new` termina en `/login`.
-- [ ] Con sesión válida, las seis rutas renderizan su contenido actual sin redirección.
-- [ ] `/login` y `/activate-account` cargan sin sesión y sin redirección.
-- [ ] Con sesión válida, entrar a `/login` redirige a `/` y el formulario no llega a renderizarse.
-- [ ] Con `jpisfil@netcloudsensei.com` y la contraseña real, "Iniciar sesión" navega a `/`, las cookies de sesión quedan escritas y un reload de `/` no vuelve a `/login`.
-- [ ] Con un email existente y una contraseña incorrecta, no navega, muestra "No pudimos iniciar sesión. Revisá tu email y contraseña." y el campo de email conserva lo tipeado.
-- [ ] Con un email inexistente y una contraseña cualquiera, se muestra el mismo mensaje genérico, sin distinguir el caso del anterior.
-- [ ] Enviar el formulario con los campos vacíos no dispara la Server Action: los dos inputs son `required`.
-- [ ] Mientras la acción corre, el botón queda deshabilitado y muestra "Iniciando…".
-- [ ] El ícono "Cerrar sesión" de la Sidebar es un `<form action>` con `<button type="submit">`, no un `<a href="#">`.
-- [ ] Clickear "Cerrar sesión" borra la sesión, lands en `/login` y `/` vuelve a redirigir a `/login`.
-- [ ] Ninguna de las dos páginas `app/kids/[id]/*` declara `generateStaticParams`.
-- [ ] `app/login/page.tsx` y las seis páginas protegidas no contienen llamadas a `supabase.from(...)`: este spec no lee ninguna tabla.
-- [ ] La historia de migraciones del proyecto sigue teniendo exactamente dos entradas; no se crea ningún archivo en `supabase/migrations/`.
-- [ ] `app/login/page.tsx` ya no muestra `caro@opendaycare.com`: los dos inputs arrancan vacíos.
-- [ ] Recargar una ruta protegida con sesión válida carga CSS y JS sin errores de assets ni loop de redirección.
-- [ ] La consola del navegador no muestra errores ni warnings en el recorrido `/login` → login exitoso → `/` → cerrar sesión → `/login`.
+- [x] `grep -rn "getSession(" lib/ app/` no devuelve resultados: la verificación de sesión usa `getClaims()` en los tres lugares (proxy, `getSessionClaims`, verificación de la acción).
+- [x] La caja de error del login replica el patrón de `components/AddKidForm.tsx:66-73`: `role="alert"` y clases `bg-alert-bg` / `text-alert-title`; no se agregaron tokens de color nuevos a `app/globals.css`.
+- [x] `npm run build` y `npm run lint` pasan sin errores.
+- [x] Sin cookies de sesión, una visita a `/` termina en `/login`.
+- [x] Sin cookies de sesión, una visita a `/kids`, `/kids/new`, `/kids/<cualquier-id>`, `/kids/<id>/parent` y `/posts/new` termina en `/login`.
+- [x] Con sesión válida, las seis rutas renderizan su contenido actual sin redirección.
+- [x] `/login` y `/activate-account` cargan sin sesión y sin redirección.
+- [x] Con sesión válida, entrar a `/login` redirige a `/` y el formulario no llega a renderizarse.
+- [x] Con `jpisfil@netcloudsensei.com` y la contraseña real, "Iniciar sesión" navega a `/`, las cookies de sesión quedan escritas y un reload de `/` no vuelve a `/login`.
+- [x] Con un email existente y una contraseña incorrecta, no navega, muestra "No pudimos iniciar sesión. Revisá tu email y contraseña." y el campo de email conserva lo tipeado.
+- [x] Con un email inexistente y una contraseña cualquiera, se muestra el mismo mensaje genérico, sin distinguir el caso del anterior.
+- [x] Enviar el formulario con los campos vacíos no dispara la Server Action: los dos inputs son `required`.
+- [x] Mientras la acción corre, el botón queda deshabilitado y muestra "Iniciando…".
+- [x] El ícono "Cerrar sesión" de la Sidebar es un `<form action>` con `<button type="submit">`, no un `<a href="#">`.
+- [x] Clickear "Cerrar sesión" borra la sesión, lands en `/login` y `/` vuelve a redirigir a `/login`.
+- [x] Ninguna de las dos páginas `app/kids/[id]/*` declara `generateStaticParams`.
+- [x] `app/login/page.tsx` y las seis páginas protegidas no contienen llamadas a `supabase.from(...)`: este spec no lee ninguna tabla.
+- [x] La historia de migraciones del proyecto sigue teniendo exactamente dos entradas; no se crea ningún archivo en `supabase/migrations/`.
+- [x] `app/login/page.tsx` ya no muestra `caro@opendaycare.com`: los dos inputs arrancan vacíos.
+- [x] Recargar una ruta protegida con sesión válida carga CSS y JS sin errores de assets ni loop de redirección.
+- [x] La consola del navegador no muestra errores ni warnings en el recorrido `/login` → login exitoso → `/` → cerrar sesión → `/login`.
 
 ## Decisions
 
