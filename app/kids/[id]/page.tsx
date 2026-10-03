@@ -1,12 +1,10 @@
 import { KidProfileLoader } from "@/components/KidProfileLoader";
 import { Sidebar } from "@/components/Sidebar";
-import { KIDS } from "@/lib/kids";
-
-export function generateStaticParams() {
-  return KIDS.map((kid) => ({ id: kid.id }));
-}
+import { requireUser } from "@/lib/supabase/session";
 
 export default async function KidPage(props: PageProps<"/kids/[id]">) {
+  await requireUser();
+
   const { id } = await props.params;
 
   return (

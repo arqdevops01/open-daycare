@@ -1,13 +1,11 @@
 import { ParentInviteLoader } from "@/components/ParentInviteLoader";
-import { KIDS } from "@/lib/kids";
-
-export function generateStaticParams() {
-  return KIDS.map((kid) => ({ id: kid.id }));
-}
+import { requireUser } from "@/lib/supabase/session";
 
 export default async function ParentInvitePage(
   props: PageProps<"/kids/[id]/parent">
 ) {
+  await requireUser();
+
   const { id } = await props.params;
 
   return (
