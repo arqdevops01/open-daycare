@@ -2,6 +2,7 @@
 
 > **Status:** Implementado
 > **Depends on:** SPEC 03, SPEC 09
+> **Handoff:** `specs/database/10-lectura-del-perfil-propio.md` (SPEC-DB-10) resuelve la lectura de `public.users` que este spec declaró fuera de alcance: abre la policy RLS de lectura propia y reemplaza el nombre y la inicial mock de la Sidebar por los del `full_name` real.
 > **Date:** 2026-09-26
 > **Objective:** Conectar `/login` a Supabase Auth con email y contraseña reales y exigir sesión en todas las rutas de la app salvo `/login` y `/activate-account`, con verificación en `proxy.ts` y en cada página protegida.
 

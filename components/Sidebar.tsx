@@ -26,9 +26,11 @@ const idleNavClass = "bg-transparent font-semibold text-nav-ink";
 
 interface SidebarProps {
   active?: ActiveSection;
+  userName: string;
+  userInitial: string;
 }
 
-export function Sidebar({ active = "feed" }: SidebarProps) {
+export function Sidebar({ active = "feed", userName, userInitial }: SidebarProps) {
   return (
     <aside className="sticky top-0 flex h-screen w-[248px] flex-none flex-col border-r border-line bg-card px-4 py-6">
       <a href="#" className="flex items-center gap-[11px] px-2 pb-[22px] pt-1">
@@ -71,12 +73,10 @@ export function Sidebar({ active = "feed" }: SidebarProps) {
       <div className="mt-[10px] border-t border-line pt-[14px]">
         <div className="flex items-center gap-[11px] px-2 py-1.5">
           <div className="flex size-[38px] flex-none items-center justify-center rounded-full bg-brand-gradient-b font-display text-[16px] font-semibold text-white">
-            {SIDEBAR.user.initial}
+            {userInitial}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-[14px] font-extrabold text-ink">
-              {SIDEBAR.user.name}
-            </div>
+            <div className="text-[14px] font-extrabold text-ink">{userName}</div>
             <div className="text-[12px] text-muted">{SIDEBAR.user.role}</div>
           </div>
           <form action={logout}>
